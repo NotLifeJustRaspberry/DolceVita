@@ -79,6 +79,57 @@ class Node
 
 class Program
 {
+    static void Print(List<Chain> chain, string message = "")
+    {
+        Console.WriteLine("\n============================\n{0}\n", message);
+
+        for (int i = 0; i < chain.Count; i++)
+        {
+            Console.Write(i + ":\t");
+            foreach (var item in chain[i].List)
+                Console.Write(item.Operation + " " + item.PreviousHash + " " + item.CurrentHash + "\n\t ");
+            Console.WriteLine();
+        }
+
+        Console.WriteLine("\n============================\n");
+    }
+    static void Feel(List<Chain> chainActive, List<Chain> chainArchived, int ChainActiveSize, int operationAmount, int threadAmount = 1)
+    {
+        Random rnd = new();
+        List<Thread> threadList = new();
+
+        void _feel(object arg)
+        {
+            //for (int i = 0; i < operationAmount; i++)
+            for (int i = (int)arg - 1; i < operationAmount; i += threadAmount)
+            {
+                int r = rnd.Next(0, ChainActiveSize);
+                lock (chainActive[r])
+                {
+                    chainActive[r].Add(i % 5);
+
+                    if (chainActive[r].IsFull)
+                    {
+                        chainArchived.Add(chainActive[r]);
+                        chainActive.RemoveAt(r);
+                        chainActive.Add(new Chain());
+                    }
+                }
+            }
+        }
+
+
+        for (int i = 0; i < threadAmount; i++)
+        {
+            Thread thread = new(_feel);
+            threadList.Add(thread);
+            threadList[i].Start(i + 1);
+        }
+
+        for (int i = 0; i < threadList.Count; i++)
+            threadList[i].Join();
+    }
+
     static void Main(string[] args)
     {
         const int ChainActiveSize = 5;
