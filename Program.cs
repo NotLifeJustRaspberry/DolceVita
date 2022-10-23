@@ -43,3 +43,36 @@ class Chain
             nodes.Add(new Node(operation, nodes[^1].CurrentHash));
     }
 }
+
+class Node
+{
+    public int Operation { get; }
+    public string PreviousHash { get; }
+    public string CurrentHash { get; }
+    public static bool operator ==(Node a, Node b)
+    {
+        return a.Operation == b.Operation && a.PreviousHash == b.PreviousHash && a.CurrentHash == a.CurrentHash;
+    }
+    public static bool operator !=(Node a, Node b)
+    {
+        return !(a == b);
+    }
+    public Node(int operation, string previousHash)
+    {
+        Operation = operation;
+        CurrentHash = Hash(operation.ToString());
+        PreviousHash = previousHash;
+    }
+
+    private static string Hash(string input)
+    {
+        MD5 md5Hasher = MD5.Create();
+        byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input));
+
+        StringBuilder sBuilder = new();
+        for (int i = 0; i < data.Length; i++)
+            sBuilder.Append(data[i].ToString("x2"));
+        return sBuilder.ToString();
+    }
+
+}
