@@ -76,3 +76,23 @@ class Node
     }
 
 }
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        const int ChainActiveSize = 5;
+        const int OperationAmount = 43;
+        List<Chain> chainActive = new();
+        List<Chain> chainArchived = new();
+
+        for (int i = 0; i < ChainActiveSize; i++)
+            chainActive.Add(new Chain());
+
+
+        Feel(chainActive, chainArchived, ChainActiveSize, OperationAmount);
+        Print(chainArchived, "Заполненые");
+        Print(chainActive, "Не заполненые");
+
+    }
+}
