@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Blockchain;
 
-class Chain
+public class Chain
 {
     // Поля класса (данные цепи).
     private readonly List<Node> nodes = new();
@@ -51,7 +51,7 @@ class Chain
     }// Добавление цепочки в Blockchain.
 } // Класс цепочка блокчейна, сюда записываются транзакции.
 
-class Node
+public class Node
 {
     // Поля класса (данные в узле).
     public int Operation { get; }
@@ -87,7 +87,7 @@ class Node
     }// Метод хеширования данных.
 }// Класс Node, нужен для хранения данных класса Chain.
 
-class Program
+public class Program
 {
     static void Print(List<Chain> chain, string message = "")
     {
