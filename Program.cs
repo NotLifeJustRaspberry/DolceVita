@@ -1,13 +1,13 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace ConsoleApp2;
+namespace Blockchain;
 
 class Chain
 {
     // Поля класса (данные цепи).
     private readonly List<Node> nodes = new();
-    private const int MaxSize = 3;
+    private const int MaxSize = 100;
 
     public Node this[int i] => nodes[i]; // Перегрузка индексатора
     public List<Node> List => nodes; // Возвращает копию листа, где хранятся данные.
@@ -145,8 +145,8 @@ class Program
     static void Main(string[] args)
     {
         // Переменные.
-        const int ChainActiveSize = 5; // Размер активной цепи.
-        const int OperationAmount = 43; // Количество транзакций.
+        const int ChainActiveSize = 10; // Размер активной цепи.
+        const int OperationAmount = 1000000; // Количество транзакций.
 
         // Инициализация активной и архивированный цепей.
         List<Chain> chainArchived = new();
