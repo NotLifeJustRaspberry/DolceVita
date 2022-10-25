@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using ClosedXML.Excel;
+using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Blockchain;
@@ -146,6 +148,32 @@ public class Program
         for (int i = 0; i < threadList.Count; i++)
             threadList[i].Join();
     } // Метод заполнение цепей.
+    static void SaveToExcel(List<Chain> chains, string name)
+    {
+
+        string? path = Path.Combine(Environment.CurrentDirectory, name);
+        XLWorkbook? wb = new();
+        IXLWorksheet? sh = wb.Worksheets.Add("1");
+        sh.Cell(1, 1).SetValue("Номер цепи");
+        sh.Cell(1, 2).SetValue("Операция");
+        sh.Cell(1, 3).SetValue("Текущий хеш");
+        sh.Cell(1, 4).SetValue("Предыдущий хеш");
+
+        for (int i = 0; i < chains.Count; i++)
+        {
+            List<Node> nodes = chains[i].List;
+            for (int j = 0; j < nodes.Count; j++)
+            {
+                sh.Cell(i * nodes.Count + j + 2, 1).SetValue(i);
+                sh.Cell(i * nodes.Count + j + 2, 2).SetValue(nodes[j].Operation);
+                sh.Cell(i * nodes.Count + j + 2, 3).SetValue(nodes[j].CurrentHash);
+                sh.Cell(i * nodes.Count + j + 2, 4).SetValue(nodes[j].PreviousHash);
+            }
+
+        }
+
+        wb.SaveAs(path + ".xlsx");
+    }
 
     static void Main(string[] args)
     {
@@ -162,8 +190,16 @@ public class Program
         // Основная часть программы.
         Feel(chainActive, chainArchived, ChainActiveSize, OperationAmount);
 
+        long freq = Stopwatch.Frequency; //частота таймера
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+      
         // Вывод данных в цепях.
         Print(chainArchived, "Заполненые");
-        Print(chainActive, "Не заполненые");
+        //Print(chainActive, "Не заполненые");
+        //SaveToExcel(chainArchived, "Заполненные");
+        stopwatch.Stop();
+        double sec = (double)stopwatch.ElapsedTicks / freq; //переводим такты в секунды
+        Console.WriteLine($"Частота таймера {freq} такт/с \r\n Время в тактах {stopwatch.ElapsedTicks} \r\n Время в секундах {sec}");
     }
 }

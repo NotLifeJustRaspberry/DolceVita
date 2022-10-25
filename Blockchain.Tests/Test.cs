@@ -1,4 +1,4 @@
-﻿namespace Blockchain.Tests
+﻿/*namespace Blockchain.Tests
 {
     [TestClass]
     public class Test
@@ -9,4 +9,4 @@
             Assert.AreEqual(true, false);
         }
     }
-}
+}*/
