@@ -38,6 +38,9 @@ public class Chain
 
     public void Add(int operation)
     {
+        // Проверка на ноль.
+        if (operation == 0) return;
+
         // Проверка заполнена ли цепь.
         if (nodes.Count >= MaxSize)
             return;

@@ -184,5 +184,63 @@
         }
 
         #endregion
+
+        #region Add
+
+        [TestMethod]
+        public void Add_100Elements_Returned100()
+        {
+            Chain chain = new();
+            for (int i = 1; i <= 100; i++)
+                chain.Add(i);
+
+            int expected = 100;
+
+            int actual = chain.Count;
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void Add_10Elements_Returned10()
+        {
+            Chain chain = new();
+            for (int i = 1; i <= 10; i++)
+                chain.Add(i);
+
+            int expected = 10;
+
+            int actual = chain.Count;
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void Add_200Elements_Returned100()
+        {
+            Chain chain = new();
+            for (int i = 1; i <= 200; i++)
+                chain.Add(i);
+
+            int expected = 100;
+
+            int actual = chain.Count;
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void Add_10_0_4_Returned2()
+        {
+            Chain chain = new();
+            chain.Add(10);
+            chain.Add(0);
+            chain.Add(4);
+
+            int expected = 2;
+
+            int actual = chain.Count;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
     }
 }
