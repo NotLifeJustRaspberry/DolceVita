@@ -1,4 +1,10 @@
-﻿using ClosedXML.Excel;
+﻿// 22.Банк
+// В банке в течение небольшого промежутка времени проводят операции миллион клиентов,
+// каждый клиент выполняет операцию со своим счетом – либо кладет N монет, либо снимает K монет. 
+// Каждая операция дописывается в одну случайную из 10 цепочек блокчейна, однако если
+// цепочка содержит 100 транзакций, она архивируется, и создается новая цепочка.
+
+using ClosedXML.Excel;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
@@ -195,9 +201,9 @@ public class Program
         stopwatch.Start();
       
         // Вывод данных в цепях.
-        Print(chainArchived, "Заполненые");
+        //Print(chainArchived, "Заполненые");
         //Print(chainActive, "Не заполненые");
-        //SaveToExcel(chainArchived, "Заполненные");
+        SaveToExcel(chainArchived, "Заполненные");
         stopwatch.Stop();
         double sec = (double)stopwatch.ElapsedTicks / freq; //переводим такты в секунды
         Console.WriteLine($"Частота таймера {freq} такт/с \r\n Время в тактах {stopwatch.ElapsedTicks} \r\n Время в секундах {sec}");
