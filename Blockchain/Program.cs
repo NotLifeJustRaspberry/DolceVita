@@ -23,6 +23,7 @@ public class Chain
     public List<Node> List => nodes; // Возвращает копию листа, где хранятся данные.
     public int Count => nodes.Count; // Выводит количество Node в Chain.
     public bool IsFull => (nodes.Count == MaxSize); // Проверяет досстигло ли количество нодов максимального значения.
+    public void Clear() => nodes.Clear(); // Чистит ноду.
 
     public static bool operator ==(Chain a, Chain b)
     {
@@ -128,7 +129,7 @@ public class Program
         {
             sw.WriteLine("Chain " + i + ":\t");
             foreach (var item in chain[i].List)
-                sw.WriteLine(item.Operation + ";" + item.PreviousHash + ";" + item.CurrentHash + "\n");
+                sw.WriteLine(item.Operation + ";" + item.PreviousHash + ";" + item.CurrentHash + ",");
             sw.WriteLine();
         }
 
@@ -144,17 +145,24 @@ public class Program
         {
             for (int i = (int)arg - 1; i < operationAmount; i += threadAmount)
             {
-                int r = rnd.Next(0, ChainActiveSize); // Выбор цепи.
-                lock (chainActive[r])
+                int rndChain = rnd.Next(0, ChainActiveSize); // Выбор цепи.
+                // Выбор значения операции. Если 0 перерандом.
+                int rndOperation;
+                do
                 {
-                    chainActive[r].Add(i % 5);
+                    rndOperation = rnd.Next(-10000, 10000);
+                } while (rndOperation == 0);
+
+                lock (chainActive[rndChain])
+                {
+                    // Добавление в цепь.
+                    chainActive[rndChain].Add(rndOperation);
 
                     // Если цепь заполнена, архивируется.
-                    if (chainActive[r].IsFull)
+                    if (chainActive[rndChain].IsFull)
                     {
-                        chainArchived.Add(chainActive[r]);
-                        chainActive.RemoveAt(r);
-                        chainActive.Add(new Chain());
+                        chainArchived.Add(chainActive[rndChain]);
+                        chainActive[rndChain].Clear();
                     }
                 }
             }
@@ -222,8 +230,8 @@ public class Program
         //Print(chainArchived, "Заполненые");
         //Print(chainActive, "Не заполненые");
         //SaveToExcel(chainArchived, "Заполненные");
-        PrintCSV(chainActive, "Не заполненые");
-        PrintCSV(chainArchived, "Заполненые");
+        PrintCSV(chainActive, "Unfilled");
+        PrintCSV(chainArchived, "Filled");
         stopwatch.Stop();
         double sec = (double)stopwatch.ElapsedTicks / freq; //переводим такты в секунды
         Console.WriteLine($"Частота таймера {freq} такт/с \r\n Время в тактах {stopwatch.ElapsedTicks} \r\n Время в секундах {sec}");
