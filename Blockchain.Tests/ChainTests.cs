@@ -242,5 +242,55 @@
         }
 
         #endregion
+
+        [TestMethod]
+        public void Clear_100Elements_Returned0()
+        {
+            int expected = 0;
+            Chain chain = new();
+            for (int i = 1; i <= 100; i++)
+                chain.Add(i);
+
+            chain.Clear();
+            int actual = chain.Count;
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void Clear_0Elements_Returned0()
+        {
+            int expected = 0;
+            Chain chain = new();
+
+            chain.Clear();
+            int actual = chain.Count;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void IsFull_100Elements_ReturnedTrue()
+        {
+            bool expected = true;
+            Chain chain = new();
+            for (int i = 1; i <= 100; i++)
+                chain.Add(i);
+
+            bool actual = chain.IsFull;
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void IsFull_10Elements_ReturnedFalse()
+        {
+            bool expected = false;
+            Chain chain = new();
+            for (int i = 1; i <= 20; i++)
+                chain.Add(i);
+
+            bool actual = chain.IsFull;
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
