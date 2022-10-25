@@ -77,6 +77,84 @@
 
             Assert.IsFalse(chainA.Equals(chainB));
         }
+
+        #endregion
+
+        #region NotEquals
+
+        [TestMethod]
+        public void NotEquals_chainA_AND_chainA_ReturnedFalse()
+        {
+            Chain chainA = new();
+            chainA.Add(647);
+            chainA.Add(463);
+            chainA.Add(-642);
+            chainA.Add(-35);
+            chainA.Add(99999);
+
+            Chain chainB = chainA;
+
+            Assert.IsFalse(!chainA.Equals(chainB));
+        }
+        [TestMethod]
+        public void NotEquals_chainA_AND_chainB_ReturnedTrue()
+        {
+            Chain chainA = new();
+            chainA.Add(647);
+            chainA.Add(463);
+            chainA.Add(-642);
+            chainA.Add(-35);
+            chainA.Add(99999);
+
+            Chain chainB = new();
+            chainA.Add(647);
+            chainA.Add(463);
+            chainA.Add(642);
+            chainA.Add(35);
+            chainA.Add(-4367);
+
+            Assert.IsTrue(!chainA.Equals(chainB));
+        }
+        [TestMethod]
+        public void NotEquals_chainA5_AND_chainB7_ReturnedTrue()
+        {
+            Chain chainA = new();
+            chainA.Add(647);
+            chainA.Add(463);
+            chainA.Add(-642);
+            chainA.Add(-35);
+            chainA.Add(99999);
+
+            Chain chainB = new();
+            chainA.Add(647);
+            chainA.Add(463);
+            chainA.Add(-642);
+            chainA.Add(-35);
+            chainA.Add(99999);
+            chainA.Add(345);
+            chainA.Add(15469);
+
+            Assert.IsTrue(!chainA.Equals(chainB));
+        }
+        [TestMethod]
+        public void NotEquals_chainA5_AND_chainB4_ReturnedTrue()
+        {
+            Chain chainA = new();
+            chainA.Add(647);
+            chainA.Add(463);
+            chainA.Add(-642);
+            chainA.Add(-35);
+            chainA.Add(99999);
+
+            Chain chainB = new();
+            chainA.Add(647);
+            chainA.Add(463);
+            chainA.Add(-642);
+            chainA.Add(-35);
+
+            Assert.IsTrue(!chainA.Equals(chainB));
+        }
+
         #endregion
     }
 }
