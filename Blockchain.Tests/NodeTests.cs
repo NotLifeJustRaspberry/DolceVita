@@ -3,216 +3,186 @@ namespace Blockchain.Tests
     [TestClass]
     public class NodeTests
     {
+        #region Equals
+
         [TestMethod]
-        public void Equals_10_null_AND_10_null_true()
+        public void Equals_10_null_AND_10_null_ReturnedTrue()
         {
-            // Arrange.
             Node a = new(10, null);
             Node b = new(10, null);
             bool expected = true;
 
-            // Act.
             bool actual = a == b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void Equals_100_abcd_AND_100_abcd_true()
+        public void Equals_100_abcd_AND_100_abcd_ReturnedTrue()
         {
-            // Arrange.
             Node a = new(10, "abcd");
             Node b = new(10, "abcd");
             bool expected = true;
 
-            // Act.
             bool actual = a == b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void Equals_10_null_AND_10_abcd_false()
+        public void Equals_10_null_AND_10_abcd_ReturnedFalse()
         {
-            // Arrange.
             Node a = new(10, null);
             Node b = new(10, "abcd");
             bool expected = false;
 
-            // Act.
             bool actual = a == b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void Equals_m10_abcd_AND_m10_abcd_false()
+        public void Equals_m10_abcd_AND_m10_abcd_ReturnedFalse()
         {
-            // Arrange.
             Node a = new(-10, "abcd");
             Node b = new(10, "abcd");
             bool expected = false;
 
-            // Act.
             bool actual = a == b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void Equals_m3457654635666_efvd40456fdg4vh479ogdfg_AND_9453345334570090_efvd40456fdg4vh479ogdfg_false()
+        public void Equals_m3457654635666_efvd40456fdg4vh479ogdfg_AND_9453345334570090_efvd40456fdg4vh479ogdfg_ReturnedFalse()
         {
-            // Arrange.
             Node a = new(-3457654635666, "efvd40456fdg4vh479ogdfg");
             Node b = new(9453345334570090, "efvd40456fdg4vh479ogdfg");
             bool expected = false;
 
-            // Act.
             bool actual = a == b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
 
+        #endregion
+
+        #region NotEquals
+
         [TestMethod]
-        public void NotEquals_34_null_AND_34_null_false()
+        public void NotEquals_34_null_AND_34_null_ReturnedFalse()
         {
-            // Arrange.
             Node a = new(34, null);
             Node b = new(34, null);
             bool expected = false;
 
-            // Act.
             bool actual = a != b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void NotEquals_567_45fdf_AND_567_45fdf_false()
+        public void NotEquals_567_45fdf_AND_567_45fdf_ReturnedFalse()
         {
-            // Arrange.
             Node a = new(567, "45fdf");
             Node b = new(567, "45fdf");
             bool expected = false;
 
-            // Act.
             bool actual = a != b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void NotEquals_7_null_AND_7_gdeej_true()
+        public void NotEquals_7_null_AND_7_gdeej_ReturnedTrue()
         {
-            // Arrange.
             Node a = new(7, null);
             Node b = new(7, "gdeej");
             bool expected = true;
 
-            // Act.
             bool actual = a != b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void NotEquals_137_qwerty34343_AND_m137_qwerty34343_true()
+        public void NotEquals_137_qwerty34343_AND_m137_qwerty34343_ReturnedTrue()
         {
-            // Arrange.
             Node a = new(137, "qwerty34343");
             Node b = new(-137, "qwerty34343");
             bool expected = true;
 
-            // Act.
             bool actual = a != b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void NotEquals_m3457656753791_efvd4056456456384568448_AND_94533453645267_efvd5345345140_true()
+        public void NotEquals_m3457656753791_efvd4056456456384568448_AND_94533453645267_efvd5345345140_ReturnedTrue()
         {
-            // Arrange.
             Node a = new(-457656753791, "efvd4056456456384568448");
             Node b = new(94533453645267, "efvd5345345140");
             bool expected = true;
 
-            // Act.
             bool actual = a != b;
 
-            // Assert.
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
-        public void Node_0_null_nullReturned()
-        {
-            // Arrange.
-            Node actual;
-            string? expectedPreviousHash = null;
-            string? expectedCurrentHash = null;
-            int? expectedOperation = null;
+        #endregion
 
-            // Act.
+        #region Node
+
+        [TestMethod]
+        public void Node_0_null_ReturnedNullNullNull()
+        {
+            Node actual;
+            int? expectedOperation = null;
+            string? expectedCurrentHash = null;
+            string? expectedPreviousHash = null;
+
             actual = new(0, null);
 
-            // Assert.
             Assert.AreEqual(expectedPreviousHash, actual.PreviousHash);
             Assert.AreEqual(expectedCurrentHash, actual.CurrentHash);
             Assert.AreEqual(expectedOperation, actual.Operation);
 
         }
         [TestMethod]
-        public void Node_0_qwerty_nullReturned()
+        public void Node_0_qwerty_ReturnedNullNullNull()
         {
-            // Arrange.
             Node actual;
-            string? expectedPreviousHash = null;
-            string? expectedCurrentHash = null;
             int? expectedOperation = null;
+            string? expectedCurrentHash = null;
+            string? expectedPreviousHash = null;
 
-            // Act.
             actual = new(0, "qwerty");
 
-            // Assert.
             Assert.AreEqual(expectedPreviousHash, actual.PreviousHash);
             Assert.AreEqual(expectedCurrentHash, actual.CurrentHash);
             Assert.AreEqual(expectedOperation, actual.Operation);
         }
         [TestMethod]
-        public void Node_345_null_345Returned()
+        public void Node_345_null_Returned345HashNull()
         {
-            // Arrange.
             Node actual;
-            string? expectedPreviousHash = null;
-            string? expectedCurrentHash = Node.Hash(345.ToString());
             int expectedOperation = 345;
+            string? expectedCurrentHash = Node.Hash(345.ToString());
+            string? expectedPreviousHash = null;
 
-            // Act.
             actual = new(345, null);
 
-            // Assert.
             Assert.AreEqual(expectedPreviousHash, actual.PreviousHash);
             Assert.AreEqual(expectedCurrentHash, actual.CurrentHash);
             Assert.AreEqual(expectedOperation, actual.Operation);
         }
         [TestMethod]
-        public void Node_345_sdfsdfds_345Returned()
+        public void Node_345_sdfsdfds_Returned345HashHash()
         {
-            // Arrange.
             Node actual;
-            string? expectedPreviousHash = "sdfsdfds";
-            string? expectedCurrentHash = Node.Hash(345.ToString());
             int expectedOperation = 345;
+            string? expectedCurrentHash = Node.Hash(345.ToString());
+            string? expectedPreviousHash = "sdfsdfds";
 
-            // Act.
             actual = new(345, "sdfsdfds");
 
-            // Assert.
             Assert.AreEqual(expectedPreviousHash, actual.PreviousHash);
             Assert.AreEqual(expectedCurrentHash, actual.CurrentHash);
             Assert.AreEqual(expectedOperation, actual.Operation);
         }
+
+        #endregion
     }
 }
