@@ -144,5 +144,75 @@ namespace Blockchain.Tests
             // Assert.
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void Node_0_null_nullReturned()
+        {
+            // Arrange.
+            Node actual;
+            string? expectedPreviousHash = null;
+            string? expectedCurrentHash = null;
+            int? expectedOperation = null;
+
+            // Act.
+            actual = new(0, null);
+
+            // Assert.
+            Assert.AreEqual(expectedPreviousHash, actual.PreviousHash);
+            Assert.AreEqual(expectedCurrentHash, actual.CurrentHash);
+            Assert.AreEqual(expectedOperation, actual.Operation);
+
+        }
+        [TestMethod]
+        public void Node_0_qwerty_nullReturned()
+        {
+            // Arrange.
+            Node actual;
+            string? expectedPreviousHash = null;
+            string? expectedCurrentHash = null;
+            int? expectedOperation = null;
+
+            // Act.
+            actual = new(0, "qwerty");
+
+            // Assert.
+            Assert.AreEqual(expectedPreviousHash, actual.PreviousHash);
+            Assert.AreEqual(expectedCurrentHash, actual.CurrentHash);
+            Assert.AreEqual(expectedOperation, actual.Operation);
+        }
+        [TestMethod]
+        public void Node_345_null_345Returned()
+        {
+            // Arrange.
+            Node actual;
+            string? expectedPreviousHash = null;
+            string? expectedCurrentHash = Node.Hash(345.ToString());
+            int expectedOperation = 345;
+
+            // Act.
+            actual = new(345, null);
+
+            // Assert.
+            Assert.AreEqual(expectedPreviousHash, actual.PreviousHash);
+            Assert.AreEqual(expectedCurrentHash, actual.CurrentHash);
+            Assert.AreEqual(expectedOperation, actual.Operation);
+        }
+        [TestMethod]
+        public void Node_345_sdfsdfds_345Returned()
+        {
+            // Arrange.
+            Node actual;
+            string? expectedPreviousHash = "sdfsdfds";
+            string? expectedCurrentHash = Node.Hash(345.ToString());
+            int expectedOperation = 345;
+
+            // Act.
+            actual = new(345, "sdfsdfds");
+
+            // Assert.
+            Assert.AreEqual(expectedPreviousHash, actual.PreviousHash);
+            Assert.AreEqual(expectedCurrentHash, actual.CurrentHash);
+            Assert.AreEqual(expectedOperation, actual.Operation);
+        }
     }
 }
