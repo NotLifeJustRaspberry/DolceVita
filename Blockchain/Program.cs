@@ -1,5 +1,15 @@
-﻿using System.Security.Cryptography;
+﻿// 22.Банк
+// В банке в течение небольшого промежутка времени проводят операции миллион клиентов,
+// каждый клиент выполняет операцию со своим счетом – либо кладет N монет, либо снимает K монет. 
+// Каждая операция дописывается в одну случайную из 10 цепочек блокчейна, однако если
+// цепочка содержит 100 транзакций, она архивируется, и создается новая цепочка.
+
+using ClosedXML.Excel;
+using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text;
+using System.IO;
+
 
 namespace Blockchain;
 
@@ -13,6 +23,7 @@ public class Chain
     public List<Node> List => nodes; // Возвращает копию листа, где хранятся данные.
     public int Count => nodes.Count; // Выводит количество Node в Chain.
     public bool IsFull => (nodes.Count == MaxSize); // Проверяет досстигло ли количество нодов максимального значения.
+    public void Clear() => nodes.Clear(); // Чистит ноду.
 
     public static bool operator ==(Chain a, Chain b)
     {
@@ -108,6 +119,22 @@ public class Program
 
         Console.WriteLine("\n============================\n");
     }// Метод для вывода данных в консоль.
+
+    static void PrintCSV(List<Chain> chain, string message = "")
+    {
+        StreamWriter sw = new StreamWriter("Output.csv");
+        sw.WriteLine(message + "\n");
+        sw.WriteLine("Operation;" + "Prev hash;" + "Current hash;"+ "\n");
+        for (int i = 0; i < chain.Count; i++)
+        {
+            sw.WriteLine("Chain " + i + ":\t");
+            foreach (var item in chain[i].List)
+                sw.WriteLine(item.Operation + ";" + item.PreviousHash + ";" + item.CurrentHash + ",");
+            sw.WriteLine();
+        }
+
+        sw.Close();
+    }// Метод для вывода данных в csv
     static void Feel(List<Chain> chainActive, List<Chain> chainArchived, int ChainActiveSize, int operationAmount, int threadAmount = 1)
     {
         // Переменные.
@@ -118,17 +145,24 @@ public class Program
         {
             for (int i = (int)arg - 1; i < operationAmount; i += threadAmount)
             {
-                int r = rnd.Next(0, ChainActiveSize); // Выбор цепи.
-                lock (chainActive[r])
+                int rndChain = rnd.Next(0, ChainActiveSize); // Выбор цепи.
+                // Выбор значения операции. Если 0 перерандом.
+                int rndOperation;
+                do
                 {
-                    chainActive[r].Add(i % 5);
+                    rndOperation = rnd.Next(-10000, 10000);
+                } while (rndOperation == 0);
+
+                lock (chainActive[rndChain])
+                {
+                    // Добавление в цепь.
+                    chainActive[rndChain].Add(rndOperation);
 
                     // Если цепь заполнена, архивируется.
-                    if (chainActive[r].IsFull)
+                    if (chainActive[rndChain].IsFull)
                     {
-                        chainArchived.Add(chainActive[r]);
-                        chainActive.RemoveAt(r);
-                        chainActive.Add(new Chain());
+                        chainArchived.Add(chainActive[rndChain]);
+                        chainActive[rndChain].Clear();
                     }
                 }
             }
@@ -146,6 +180,32 @@ public class Program
         for (int i = 0; i < threadList.Count; i++)
             threadList[i].Join();
     } // Метод заполнение цепей.
+    static void SaveToExcel(List<Chain> chains, string name)
+    {
+
+        string? path = Path.Combine(Environment.CurrentDirectory, name);
+        XLWorkbook? wb = new();
+        IXLWorksheet? sh = wb.Worksheets.Add("1");
+        sh.Cell(1, 1).SetValue("Номер цепи");
+        sh.Cell(1, 2).SetValue("Операция");
+        sh.Cell(1, 3).SetValue("Текущий хеш");
+        sh.Cell(1, 4).SetValue("Предыдущий хеш");
+
+        for (int i = 0; i < chains.Count; i++)
+        {
+            List<Node> nodes = chains[i].List;
+            for (int j = 0; j < nodes.Count; j++)
+            {
+                sh.Cell(i * nodes.Count + j + 2, 1).SetValue(i);
+                sh.Cell(i * nodes.Count + j + 2, 2).SetValue(nodes[j].Operation);
+                sh.Cell(i * nodes.Count + j + 2, 3).SetValue(nodes[j].CurrentHash);
+                sh.Cell(i * nodes.Count + j + 2, 4).SetValue(nodes[j].PreviousHash);
+            }
+
+        }
+
+        wb.SaveAs(path + ".xlsx");
+    }
 
     static void Main(string[] args)
     {
@@ -162,8 +222,19 @@ public class Program
         // Основная часть программы.
         Feel(chainActive, chainArchived, ChainActiveSize, OperationAmount);
 
+        long freq = Stopwatch.Frequency; //частота таймера
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         // Вывод данных в цепях.
-        Print(chainArchived, "Заполненые");
-        Print(chainActive, "Не заполненые");
+        //Print(chainArchived, "Заполненые");
+        //Print(chainActive, "Не заполненые");
+        //SaveToExcel(chainArchived, "Заполненные");
+        PrintCSV(chainActive, "Unfilled");
+        PrintCSV(chainArchived, "Filled");
+        stopwatch.Stop();
+        double sec = (double)stopwatch.ElapsedTicks / freq; //переводим такты в секунды
+        Console.WriteLine($"Частота таймера {freq} такт/с \r\n Время в тактах {stopwatch.ElapsedTicks} \r\n Время в секундах {sec}");
+
     }
 }
