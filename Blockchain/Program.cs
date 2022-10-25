@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Blockchain;
 
-class Chain
+public class Chain
 {
     // Поля класса (данные цепи).
     private readonly List<Node> nodes = new();
@@ -38,6 +38,9 @@ class Chain
 
     public void Add(int operation)
     {
+        // Проверка на ноль.
+        if (operation == 0) return;
+
         // Проверка заполнена ли цепь.
         if (nodes.Count >= MaxSize)
             return;
@@ -51,12 +54,12 @@ class Chain
     }// Добавление цепочки в Blockchain.
 } // Класс цепочка блокчейна, сюда записываются транзакции.
 
-class Node
+public class Node
 {
     // Поля класса (данные в узле).
-    public int Operation { get; }
-    public string PreviousHash { get; }
-    public string CurrentHash { get; }
+    public long? Operation { get; }
+    public string? PreviousHash { get; }
+    public string? CurrentHash { get; }
 
     public static bool operator ==(Node a, Node b)
     {
@@ -68,14 +71,16 @@ class Node
         return !(a == b);
     }// Сравнение двух экземпляров класса Node.
 
-    public Node(int operation, string previousHash)
+    public Node(long operation, string? previousHash)
     {
+        if (operation == 0) return;
+
         Operation = operation;
         CurrentHash = Hash(operation.ToString());
         PreviousHash = previousHash;
     }// Инициализация Node.
 
-    private static string Hash(string input)
+    public static string Hash(string input)
     {
         MD5 md5Hasher = MD5.Create();
         byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input));
@@ -87,7 +92,7 @@ class Node
     }// Метод хеширования данных.
 }// Класс Node, нужен для хранения данных класса Chain.
 
-class Program
+public class Program
 {
     static void Print(List<Chain> chain, string message = "")
     {
