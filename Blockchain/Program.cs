@@ -54,7 +54,7 @@ public class Chain
 public class Node
 {
     // Поля класса (данные в узле).
-    public int Operation { get; }
+    public long Operation { get; }
     public string PreviousHash { get; }
     public string CurrentHash { get; }
 
@@ -68,7 +68,7 @@ public class Node
         return !(a == b);
     }// Сравнение двух экземпляров класса Node.
 
-    public Node(int operation, string previousHash)
+    public Node(long operation, string previousHash)
     {
         Operation = operation;
         CurrentHash = Hash(operation.ToString());
