@@ -105,7 +105,7 @@ public class Node
 
 public class Program
 {
-    static void Print(List<Chain> chain, string message = "")
+    static void PrintConsole(List<Chain> chain, string message = "")
     {
         Console.WriteLine("\n============================\n{0}\n", message);
 
@@ -134,7 +134,7 @@ public class Program
         }
 
         sw.Close();
-    }// Метод для вывода данных в csv
+    }// Метод для вывода данных в csv.
     static void Feel(List<Chain> chainActive, List<Chain> chainArchived, int ChainActiveSize, int operationAmount, int threadAmount = 1)
     {
         // Переменные.
@@ -180,7 +180,7 @@ public class Program
         for (int i = 0; i < threadList.Count; i++)
             threadList[i].Join();
     } // Метод заполнение цепей.
-    static void SaveToExcel(List<Chain> chains, string name)
+    static void PrintExcel(List<Chain> chains, string name)
     {
 
         string? path = Path.Combine(Environment.CurrentDirectory, name);
@@ -205,7 +205,7 @@ public class Program
         }
 
         wb.SaveAs(path + ".xlsx");
-    }
+    }// Метод для вывода данных в csv.
 
     static void Main(string[] args)
     {
