@@ -14,10 +14,12 @@
             chainA.Add(-642);
             chainA.Add(-35);
             chainA.Add(99999);
-
             Chain chainB = chainA;
+            bool expected = true;
 
-            Assert.IsTrue(chainA.Equals(chainB));
+            bool actual = chainB == chainA;
+
+            Assert.AreEqual(expected, actual);
         }
         [TestMethod]
         public void Equals_chainA_AND_chainB_ReturnedFalse()
@@ -36,7 +38,11 @@
             chainA.Add(35);
             chainA.Add(-4367);
 
-            Assert.IsFalse(chainA.Equals(chainB));
+            bool expected = false;
+
+            bool actual = chainB == chainA;
+
+            Assert.AreEqual(expected, actual);
         }
         [TestMethod]
         public void Equals_chainA5_AND_chainB7_ReturnedFalse()
@@ -57,7 +63,11 @@
             chainA.Add(345);
             chainA.Add(15469);
 
-            Assert.IsFalse(chainA.Equals(chainB));
+            bool expected = false;
+
+            bool actual = chainB == chainA;
+
+            Assert.AreEqual(expected, actual);
         }
         [TestMethod]
         public void Equals_chainA5_AND_chainB4_ReturnedFalse()
@@ -75,7 +85,11 @@
             chainA.Add(-642);
             chainA.Add(-35);
 
-            Assert.IsFalse(chainA.Equals(chainB));
+            bool expected = false;
+
+            bool actual = chainB == chainA;
+
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion
@@ -91,10 +105,12 @@
             chainA.Add(-642);
             chainA.Add(-35);
             chainA.Add(99999);
-
             Chain chainB = chainA;
+            bool expected = false;
 
-            Assert.IsFalse(!chainA.Equals(chainB));
+            bool actual = chainB != chainA;
+
+            Assert.AreEqual(expected, actual);
         }
         [TestMethod]
         public void NotEquals_chainA_AND_chainB_ReturnedTrue()
@@ -113,7 +129,11 @@
             chainA.Add(35);
             chainA.Add(-4367);
 
-            Assert.IsTrue(!chainA.Equals(chainB));
+            bool expected = true;
+
+            bool actual = chainB != chainA;
+
+            Assert.AreEqual(expected, actual);
         }
         [TestMethod]
         public void NotEquals_chainA5_AND_chainB7_ReturnedTrue()
@@ -134,7 +154,11 @@
             chainA.Add(345);
             chainA.Add(15469);
 
-            Assert.IsTrue(!chainA.Equals(chainB));
+            bool expected = true;
+
+            bool actual = chainB != chainA;
+
+            Assert.AreEqual(expected, actual);
         }
         [TestMethod]
         public void NotEquals_chainA5_AND_chainB4_ReturnedTrue()
@@ -152,7 +176,11 @@
             chainA.Add(-642);
             chainA.Add(-35);
 
-            Assert.IsTrue(!chainA.Equals(chainB));
+            bool expected = true;
+
+            bool actual = chainB != chainA;
+
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion
