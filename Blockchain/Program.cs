@@ -8,6 +8,8 @@ using ClosedXML.Excel;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
+
 
 namespace Blockchain;
 
@@ -116,6 +118,22 @@ public class Program
 
         Console.WriteLine("\n============================\n");
     }// Метод для вывода данных в консоль.
+
+    static void PrintCSV(List<Chain> chain, string message = "")
+    {
+        StreamWriter sw = new StreamWriter("Output.csv");
+        sw.WriteLine(message + "\n");
+        sw.WriteLine("Operation;" + "Prev hash;" + "Current hash;"+ "\n");
+        for (int i = 0; i < chain.Count; i++)
+        {
+            sw.WriteLine("Chain " + i + ":\t");
+            foreach (var item in chain[i].List)
+                sw.WriteLine(item.Operation + ";" + item.PreviousHash + ";" + item.CurrentHash + "\n");
+            sw.WriteLine();
+        }
+
+        sw.Close();
+    }// Метод для вывода данных в csv
     static void Feel(List<Chain> chainActive, List<Chain> chainArchived, int ChainActiveSize, int operationAmount, int threadAmount = 1)
     {
         // Переменные.
@@ -199,13 +217,16 @@ public class Program
         long freq = Stopwatch.Frequency; //частота таймера
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-      
+
         // Вывод данных в цепях.
         //Print(chainArchived, "Заполненые");
         //Print(chainActive, "Не заполненые");
-        SaveToExcel(chainArchived, "Заполненные");
+        //SaveToExcel(chainArchived, "Заполненные");
+        PrintCSV(chainActive, "Не заполненые");
+        PrintCSV(chainArchived, "Заполненые");
         stopwatch.Stop();
         double sec = (double)stopwatch.ElapsedTicks / freq; //переводим такты в секунды
         Console.WriteLine($"Частота таймера {freq} такт/с \r\n Время в тактах {stopwatch.ElapsedTicks} \r\n Время в секундах {sec}");
+
     }
 }
