@@ -12,7 +12,7 @@ namespace Blockchain;
 public class Chain
 {
     // Поля класса (данные цепи).
-    private readonly List<Node> nodes = new();
+    private List<Node> nodes = new();
     private const int MaxSize = 100;
 
     public Node this[int i] => nodes[i]; // Перегрузка индексатора
@@ -43,7 +43,7 @@ public class Chain
         return !(a == b);
     }// Сравнение двух экземпляров класса Node.
 
-    public void Add(int operation)
+    public void Add(long? operation)
     {
         // Проверка на ноль.
         if (operation == 0) return;
@@ -59,6 +59,15 @@ public class Chain
         else
             nodes.Add(new Node(operation, nodes[^1].CurrentHash));
     }// Добавление цепочки в Blockchain.
+
+    public Chain Clone()
+    {
+        Chain clone = new Chain();
+        foreach (var item in nodes)
+            clone.Add(item.Operation);
+        return clone;
+    }
+
 } // Класс цепочка блокчейна, сюда записываются транзакции.
 public class Node
 {
@@ -77,7 +86,7 @@ public class Node
         return !(a == b);
     }// Сравнение двух экземпляров класса Node.
 
-    public Node(long operation, string? previousHash)
+    public Node(long? operation, string? previousHash)
     {
         if (operation == 0) return;
 
@@ -157,7 +166,7 @@ public class Program
                     // Если цепь заполнена, архивируется.
                     if (chainActive[rndChain].IsFull)
                     {
-                        chainArchived.Add(chainActive[rndChain]);
+                        chainArchived.Add(chainActive[rndChain].Clone());
                         chainActive[rndChain].Clear();
                     }
                 }
