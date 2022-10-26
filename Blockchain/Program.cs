@@ -1,6 +1,4 @@
-﻿using ClosedXML.Excel;
-using System.Diagnostics;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace Blockchain;
@@ -14,7 +12,7 @@ namespace Blockchain;
 public class Chain
 {
     // Поля класса (данные цепи).
-    private readonly List<Node> nodes = new();
+    private List<Node> nodes = new();
     private const int MaxSize = 100;
 
     public Node this[int i] => nodes[i]; // Перегрузка индексатора
@@ -45,7 +43,7 @@ public class Chain
         return !(a == b);
     }// Сравнение двух экземпляров класса Node.
 
-    public void Add(int operation)
+    public void Add(long? operation)
     {
         // Проверка на ноль.
         if (operation == 0) return;
@@ -61,6 +59,15 @@ public class Chain
         else
             nodes.Add(new Node(operation, nodes[^1].CurrentHash));
     }// Добавление цепочки в Blockchain.
+
+    public Chain Clone()
+    {
+        Chain clone = new Chain();
+        foreach (var item in nodes)
+            clone.Add(item.Operation);
+        return clone;
+    }
+
 } // Класс цепочка блокчейна, сюда записываются транзакции.
 public class Node
 {
@@ -79,7 +86,7 @@ public class Node
         return !(a == b);
     }// Сравнение двух экземпляров класса Node.
 
-    public Node(long operation, string? previousHash)
+    public Node(long? operation, string? previousHash)
     {
         if (operation == 0) return;
 
@@ -116,32 +123,7 @@ public class Program
 
         Console.WriteLine("\n============================\n");
     }// Метод для вывода данных в консоль.
-    static void PrintExcel(List<Chain> chains, string name)
-    {
 
-        string? path = Path.Combine(Environment.CurrentDirectory, name);
-        XLWorkbook? wb = new();
-        IXLWorksheet? sh = wb.Worksheets.Add("1");
-        sh.Cell(1, 1).SetValue("Номер цепи");
-        sh.Cell(1, 2).SetValue("Операция");
-        sh.Cell(1, 3).SetValue("Текущий хеш");
-        sh.Cell(1, 4).SetValue("Предыдущий хеш");
-
-        for (int i = 0; i < chains.Count; i++)
-        {
-            List<Node> nodes = chains[i].List;
-            for (int j = 0; j < nodes.Count; j++)
-            {
-                sh.Cell(i * nodes.Count + j + 2, 1).SetValue(i);
-                sh.Cell(i * nodes.Count + j + 2, 2).SetValue(nodes[j].Operation);
-                sh.Cell(i * nodes.Count + j + 2, 3).SetValue(nodes[j].CurrentHash);
-                sh.Cell(i * nodes.Count + j + 2, 4).SetValue(nodes[j].PreviousHash);
-            }
-
-        }
-
-        wb.SaveAs(path + ".xlsx");
-    }// Метод для вывода данных в Excel.
     static void PrintCSV(List<Chain> chain, string message = "")
     {
         StreamWriter sw = new("Output.csv");
@@ -151,7 +133,7 @@ public class Program
         {
             sw.WriteLine("Chain " + i + ":\t");
             foreach (var item in chain[i].List)
-                sw.WriteLine(item.Operation + ";" + item.PreviousHash + ";" + item.CurrentHash + ",");
+                sw.WriteLine(item.Operation + ";" + item.PreviousHash + ";" + item.CurrentHash);
             sw.WriteLine();
         }
 
@@ -184,7 +166,7 @@ public class Program
                     // Если цепь заполнена, архивируется.
                     if (chainActive[rndChain].IsFull)
                     {
-                        chainArchived.Add(chainActive[rndChain]);
+                        chainArchived.Add(chainActive[rndChain].Clone());
                         chainActive[rndChain].Clear();
                     }
                 }
